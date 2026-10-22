@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WG Toggler</string>
+
+    <string name="label_tunnel">WireGuard tunnel name</string>
+    <string name="hint_tunnel">e.g. home-vpn</string>
+    <string name="label_ssids">Home Wi‑Fi networks (one SSID per line, tunnel OFF here)</string>
+    <string name="hint_ssids">MyHomeWifi\nMyHomeWifi-5G</string>
+    <string name="label_enabled">Automatic toggling enabled</string>
+    <string name="btn_save">Save &amp; apply</string>
+    <string name="btn_grant">Grant permissions</string>
+    <string name="btn_open_wg">Open WireGuard app</string>
+    <string name="btn_wg_battery">WireGuard battery settings</string>
+
+    <string name="toast_saved">Saved</string>
+    <string name="toast_need_location">Location permission is required to read the Wi‑Fi name</string>
+    <string name="toast_need_wg_permission">WireGuard must allow this app to control tunnels</string>
+    <string name="toast_need_tunnel">Enter the tunnel name first</string>
+    <string name="toast_all_granted">All permissions already granted</string>
+
+    <string name="status_wg_found">✔ WireGuard app installed</string>
+    <string name="status_wg_missing">✘ WireGuard app (com.wireguard.android) not installed</string>
+    <string name="status_battery_ok">✔ WireGuard exempt from battery optimization</string>
+    <string name="status_battery_missing">✘ WireGuard is battery-optimized: Android blocks it from starting the VPN in the background. Set Battery → Unrestricted.</string>
+    <string name="status_wgperm_ok">✔ Allowed to control WireGuard tunnels</string>
+    <string name="status_wgperm_missing">✘ Not allowed to control WireGuard tunnels (tap Grant permissions)</string>
+    <string name="status_wgperm_legacy">△ Older WireGuard: enable “Allow remote control apps” in its settings</string>
+    <string name="status_loc_ok">✔ Location permission granted</string>
+    <string name="status_loc_missing">✘ Location permission missing (needed to read SSID)</string>
+    <string name="status_bg_ok">✔ Background location granted</string>
+    <string name="status_bg_missing">△ Background location not granted (SSID may be unreadable right after reboot)</string>
+    <string name="status_loc_off">✘ System location is OFF – Android hides SSIDs while it is off</string>
+    <string name="status_running">● Watcher running</string>
+    <string name="status_stopped">○ Watcher stopped</string>
+    <string name="status_last">Last: %1$s</string>
+
+    <string name="action_up">UP %1$s (%2$s)</string>
+    <string name="action_down">DOWN %1$s (%2$s)</string>
+
+    <string name="notif_channel">Wi‑Fi watcher</string>
+    <string name="notif_waiting">Waiting for network…</string>
+    <string name="notif_no_wifi">no Wi‑Fi (mobile data or offline)</string>
+    <string name="notif_wifi">Wi‑Fi “%1$s”</string>
+    <string name="notif_wifi_unknown">Wi‑Fi (SSID unavailable)</string>
+    <string name="notif_state_up">Tunnel UP – %1$s</string>
+    <string name="notif_state_down">Tunnel DOWN – %1$s</string>
+
+    <string name="help">Setup:\n1. Enter the tunnel name exactly as it appears in WireGuard.\n2. List your home SSIDs.\n3. Tap Grant permissions: allow controlling WireGuard tunnels, choose “Allow all the time” for location, and keep system Location on.\n4. Tap WireGuard battery settings and set Battery → Unrestricted, otherwise Android refuses to let WireGuard start the VPN in the background.\n5. Enable and save.\n\nOlder WireGuard builds have no permission prompt; enable “Allow remote control apps” in their settings instead.\n\nOn a home SSID the tunnel is brought down; on any other Wi‑Fi or on mobile data it is brought up.</string>
+</resources>
