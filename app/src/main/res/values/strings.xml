@@ -30,12 +30,21 @@
     <string name="status_bg_ok">✔ Background location granted</string>
     <string name="status_bg_missing">△ Background location not granted (SSID may be unreadable right after reboot)</string>
     <string name="status_loc_off">✘ System location is OFF – Android hides SSIDs while it is off</string>
+    <string name="status_self_battery_ok">✔ WG Toggler exempt from battery optimization</string>
+    <string name="status_self_battery_missing">✘ WG Toggler is battery-optimized: the system may kill the watcher (tap Grant permissions)</string>
+    <string name="status_samsung">△ Samsung: in Settings → Battery → Background usage limits, make sure neither WG Toggler nor WireGuard is in Sleeping or Deep sleeping apps, and set both to Unrestricted</string>
     <string name="status_running">● Watcher running</string>
+    <string name="status_not_running">✘ Watcher NOT running although enabled – the system stopped it; the watchdog retries every 15 min</string>
     <string name="status_stopped">○ Watcher stopped</string>
-    <string name="status_last">Last: %1$s</string>
+    <string name="status_error">Problem: %1$s</string>
+    <string name="status_seen">Seen: %1$s</string>
+    <string name="status_last">Sent: %1$s</string>
 
-    <string name="action_up">UP %1$s (%2$s)</string>
-    <string name="action_down">DOWN %1$s (%2$s)</string>
+    <string name="seen_at">%1$s at %2$s</string>
+    <string name="action_up">UP %1$s (%2$s) at %3$s</string>
+    <string name="action_down">DOWN %1$s (%2$s) at %3$s</string>
+    <string name="error_cannot_start">could not start the watcher at %1$s (%2$s) – check location permission and battery settings</string>
+    <string name="error_restarted_by_watchdog">the watcher had been killed and was restarted by the watchdog</string>
 
     <string name="notif_channel">Wi‑Fi watcher</string>
     <string name="notif_waiting">Waiting for network…</string>
@@ -45,5 +54,5 @@
     <string name="notif_state_up">Tunnel UP – %1$s</string>
     <string name="notif_state_down">Tunnel DOWN – %1$s</string>
 
-    <string name="help">Setup:\n1. Enter the tunnel name exactly as it appears in WireGuard.\n2. List your home SSIDs.\n3. Tap Grant permissions: allow controlling WireGuard tunnels, choose “Allow all the time” for location, and keep system Location on.\n4. Tap WireGuard battery settings and set Battery → Unrestricted, otherwise Android refuses to let WireGuard start the VPN in the background.\n5. Enable and save.\n\nOlder WireGuard builds have no permission prompt; enable “Allow remote control apps” in their settings instead.\n\nOn a home SSID the tunnel is brought down; on any other Wi‑Fi or on mobile data it is brought up.</string>
+    <string name="help">Setup:\n1. Enter the tunnel name exactly as it appears in WireGuard.\n2. List your home SSIDs.\n3. Tap Grant permissions: allow controlling WireGuard tunnels, choose “Allow all the time” for location, and keep system Location on.\n4. Tap WireGuard battery settings and set Battery → Unrestricted, otherwise Android refuses to let WireGuard start the VPN in the background.\n5. Enable and save.\n\nSamsung phones additionally put apps to sleep: set both this app and WireGuard to Unrestricted and remove them from Sleeping apps.\n\nOlder WireGuard builds have no permission prompt; enable “Allow remote control apps” in their settings instead.\n\nOn a home SSID the tunnel is brought down; on any other Wi‑Fi or on mobile data it is brought up.</string>
 </resources>

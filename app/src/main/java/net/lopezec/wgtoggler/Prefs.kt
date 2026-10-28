@@ -28,6 +28,16 @@ class Prefs(context: Context) {
         get() = sp.getString(KEY_LAST, "") ?: ""
         set(v) = sp.edit().putString(KEY_LAST, v).apply()
 
+    /** Network the service last evaluated, with a timestamp, for the status line. */
+    var lastSeen: String
+        get() = sp.getString(KEY_SEEN, "") ?: ""
+        set(v) = sp.edit().putString(KEY_SEEN, v).apply()
+
+    /** Last failure the service hit (could not go foreground, restarted by watchdog, ...). */
+    var lastError: String
+        get() = sp.getString(KEY_ERROR, "") ?: ""
+        set(v) = sp.edit().putString(KEY_ERROR, v).apply()
+
     fun isHome(ssid: String?): Boolean = ssid != null && ssid in homeSsids
 
     companion object {
@@ -35,5 +45,7 @@ class Prefs(context: Context) {
         private const val KEY_SSIDS = "home_ssids"
         private const val KEY_ENABLED = "enabled"
         private const val KEY_LAST = "last_action"
+        private const val KEY_SEEN = "last_seen"
+        private const val KEY_ERROR = "last_error"
     }
 }

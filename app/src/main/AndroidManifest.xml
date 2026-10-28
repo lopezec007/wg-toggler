@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Lets the app ask to be exempted from battery optimization (needed on Samsung etc.). -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <!-- Runtime ("dangerous") permission defined by the WireGuard app (1.0.2026xxxx and later);
          without it the system silently drops our control broadcasts. -->
     <uses-permission android:name="com.wireguard.android.permission.CONTROL_TUNNELS" />
@@ -39,6 +41,11 @@
             android:name=".WifiWatcherService"
             android:exported="false"
             android:foregroundServiceType="location" />
+
+        <service
+            android:name=".WatchdogJob"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver
             android:name=".BootReceiver"

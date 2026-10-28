@@ -19,6 +19,8 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import java.text.DateFormat
+import java.util.Date
 
 /**
  * Foreground service that watches Wi-Fi networks (VPN networks are excluded by the request,
@@ -50,9 +52,11 @@ class WifiWatcherService : Service() {
             // Typically: location permission was revoked, or the system refused a
             // background start. Nothing useful can be done without the SSID.
             Log.e(TAG, "Cannot start foreground service: $e")
+            prefs.lastError = getString(R.string.error_cannot_start, now(), e.javaClass.simpleName)
             stopSelf()
             return
         }
+        running = true
         registerCallback()
     }
 
@@ -66,6 +70,7 @@ class WifiWatcherService : Service() {
     }
 
     override fun onDestroy() {
+        running = false
         unregisterCallback()
         super.onDestroy()
     }
@@ -116,11 +121,12 @@ class WifiWatcherService : Service() {
 
     private fun apply(desiredUp: Boolean, where: String) {
         val tunnel = prefs.tunnelName
+        prefs.lastSeen = getString(R.string.seen_at, where, now())
         if (desiredUp != lastSentUp) {
             lastSentUp = desiredUp
             WireGuard.setTunnel(this, tunnel, desiredUp)
             prefs.lastAction = getString(
-                if (desiredUp) R.string.action_up else R.string.action_down, tunnel, where
+                if (desiredUp) R.string.action_up else R.string.action_down, tunnel, where, now()
             )
             Log.i(TAG, prefs.lastAction)
         }
@@ -149,6 +155,8 @@ class WifiWatcherService : Service() {
         }
     }
 
+    private fun now(): String = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
+
     private fun buildNotification(text: String): Notification {
         val nm = getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(
@@ -175,6 +183,11 @@ class WifiWatcherService : Service() {
         private const val CHANNEL_ID = "watcher"
         private const val NOTIFICATION_ID = 1
         const val ACTION_REEVALUATE = "net.lopezec.wgtoggler.REEVALUATE"
+
+        /** True while an instance is in the foreground; lets the UI and watchdog see reality. */
+        @Volatile
+        var running = false
+            private set
 
         fun start(context: Context, reevaluate: Boolean = false) {
             val i = Intent(context, WifiWatcherService::class.java)

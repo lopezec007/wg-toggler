@@ -32,6 +32,8 @@ No third‑party or AndroidX dependencies; the APK is just the platform SDK plus
    * list your home SSIDs, one per line;
    * tap **Grant permissions** and accept each prompt (see below);
    * tap **WireGuard battery settings** and set **Battery → Unrestricted** (see below);
+   * the last **Grant permissions** step asks to exempt WG Toggler itself from battery
+     optimization, so the system does not kill the watcher (see below);
    * turn on **Automatic toggling enabled** and tap **Save & apply**.
 4. Keep the system **Location** toggle on. Android 10+ hides SSIDs from apps while it is off.
    On GrapheneOS the app's per‑app Location toggle must be on as well (it is, by default,
@@ -55,6 +57,10 @@ The status block at the bottom of the screen shows each of these requirements wi
   after a reboot may see "SSID unavailable" and bring the tunnel UP until the next change.
 * **Notifications**. The watcher is a foreground service and shows a low-priority
   persistent notification with the current network and tunnel state.
+* **Battery optimization exemption for WG Toggler itself** (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`).
+  Stock Android leaves foreground services alone, but some OEM builds kill them anyway or
+  refuse to restart them. The exemption keeps the watcher alive and lets the watchdog
+  (below) restart it from the background.
 
 ### WireGuard battery optimization (the non-obvious one)
 
@@ -73,6 +79,28 @@ page), or over adb:
 ```sh
 adb shell dumpsys deviceidle whitelist +com.wireguard.android
 ```
+
+### Samsung (One UI) phones
+
+One UI adds its own app-sleeping layer on top of Android's battery optimization. An app that
+is "sleeping" has its foreground service killed and is not allowed to restart it, and a
+"deep sleeping" app never runs in the background at all. Symptoms: the notification
+disappears after a while, the status block says the watcher is **not running although
+enabled**, or nothing happens after a reboot.
+
+For both **WG Toggler** and **WireGuard**:
+
+1. Settings → Apps → *app* → Battery → **Unrestricted**.
+2. Settings → Battery → Background usage limits → make sure neither app is listed under
+   **Sleeping apps** or **Deep sleeping apps**; add both to **Never sleeping apps**.
+3. Consider turning off **Put unused apps to sleep** on that same screen, since One UI
+   re-adds apps you have not opened for a while.
+4. Settings → Device care → Auto optimization: turn off **Restart app automatically** style
+   options if present, or they will kill the watcher nightly.
+
+The app shows a Samsung-specific reminder in its status block, and a periodic watchdog job
+(every 15 minutes) restarts the watcher if the system killed it. The watchdog only works
+once WG Toggler is exempt from battery optimization (step 1).
 
 ### Always-on VPN settings
 
@@ -114,9 +142,15 @@ What to look for:
 
 | Log line | Meaning |
 | --- | --- |
+| Toggler logs `Cannot start foreground service` | Location permission revoked, or the system refused the start (battery restricted). |
+| Toggler logs `Watcher not running although enabled` | The watchdog found the service dead and restarted it; see the Samsung section. |
 | `Permission Denial ... requires com.wireguard.android.permission.CONTROL_TUNNELS` | Control permission not granted; tap **Grant permissions**. |
 | `Background start not allowed ... GoBackend$VpnService` | WireGuard is battery-optimized; set Battery → Unrestricted. |
 | `Bringing tunnel X UP` followed by `Device started` | Working. |
 | Toggler logs `Wi‑Fi (SSID unavailable)` | Location permission or system Location is off. |
+
+The status block in the app shows the same things without a computer: whether the watcher is
+actually running, the last network it saw and when, the last intent it sent and when, and the
+last error it hit.
 
 The persistent notification also shows the current network and the state the tunnel was set to.
